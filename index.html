@@ -80,23 +80,23 @@
 <body>
     <!-- Home Page -->
     <div id="homePage" class="container">
-        <h1 class="center">Welcome to the Quiz</h1>
-        <p class="center">Click the button below to start the quiz.</p>
-        <button onclick="goToQuiz()">Start Quiz</button>
+        <h1 class="center">Welcome to the Driving Test</h1>
+        <p class="center">Click the button below to start the Test.</p>
+        <button onclick="goToQuiz()">Begin Test</button>
     </div>
 
     <!-- Quiz Page -->
     <div id="quizPage" class="container hidden">
-        <h2 class="center">Quiz</h2>
+        <h2 class="center">Driving Test</h2>
         <form id="quizForm">
             <div id="questionsContainer"></div>
-            <button type="button" onclick="submitQuiz()">Submit Quiz</button>
+            <button type="button" onclick="submitQuiz()">Complete Test</button>
         </form>
     </div>
 
     <!-- Results Page -->
     <div id="resultsPage" class="container hidden">
-        <h2 class="center">Quiz Results</h2>
+        <h2 class="center">Test Results</h2>
         <div id="resultBox" class="result"></div>
         <div id="feedbackContainer"></div>
         <button onclick="goToHome()">Go Back to Home</button>
