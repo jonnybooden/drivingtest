@@ -28,6 +28,17 @@
         h1, h2 {
             color: #333;
         }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            margin-left: 20px;
+        }
         button {
             display: block;
             margin: 20px auto;
@@ -107,9 +118,13 @@
             questionDiv.classList.add('question');
             questionDiv.innerHTML = `
                 <label>${q.id}. ${q.question}</label>
-                ${q.options.map((opt, index) => `
-                    <input type="radio" name="q${q.id}" value="${index}"> ${opt}<br>
-                `).join('')}
+                <div class="options">
+                    ${q.options.map((opt, index) => `
+                        <label>
+                            <input type="radio" name="q${q.id}" value="${index}"> ${opt}
+                        </label>
+                    `).join('')}
+                </div>
             `;
             container.appendChild(questionDiv);
         });
@@ -166,7 +181,7 @@
                 resultBox.className = 'result fail';
                 resultBox.textContent = `You Failed. Your score is ${totalScore}.`;
             }
-            //hey
+
             // Navigate to results page
             document.getElementById('quizPage').classList.add('hidden');
             document.getElementById('resultsPage').classList.remove('hidden');
