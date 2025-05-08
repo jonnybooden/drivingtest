@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Page Quiz App with Feedback</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .hidden {
+            display: none;
+        }
+        .center {
+            text-align: center;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result.pass {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            padding: 10px;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .result.fail {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .feedback {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-left: 5px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <!-- Home Page -->
+    <div id="homePage" class="container">
+        <h1 class="center">Welcome to the Quiz</h1>
+        <p class="center">Click the button below to start the quiz.</p>
+        <button onclick="goToQuiz()">Start Quiz</button>
+    </div>
+
+    <!-- Quiz Page -->
+    <div id="quizPage" class="container hidden">
+        <h2 class="center">Quiz</h2>
+        <form id="quizForm">
+            <div id="questionsContainer"></div>
+            <button type="button" onclick="submitQuiz()">Submit Quiz</button>
+        </form>
+    </div>
+
+    <!-- Results Page -->
+    <div id="resultsPage" class="container hidden">
+        <h2 class="center">Quiz Results</h2>
+        <div id="resultBox" class="result"></div>
+        <div id="feedbackContainer"></div>
+        <button onclick="goToHome()">Go Back to Home</button>
+    </div>
+
+    <script>
+        const questions = [
+            { id: 1, question: "What is 2 + 2?", options: ["3", "4", "5", "6", "7"], correct: 1, feedback: ["2 + 2 is not 3.", "Correct! 2 + 2 equals 4.", "2 + 2 is not 5.", "2 + 2 is not 6.", "2 + 2 is not 7."] },
+            { id: 2, question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Rome", "Lisbon"], correct: 2, feedback: ["Berlin is the capital of Germany.", "Madrid is the capital of Spain.", "Correct! Paris is the capital of France.", "Rome is the capital of Italy.", "Lisbon is the capital of Portugal."] },
+            { id: 3, question: "Which planet is closest to the Sun?", options: ["Earth", "Venus", "Mars", "Mercury", "Jupiter"], correct: 3, feedback: ["Earth is not the closest planet to the Sun.", "Venus is closer but not the closest.", "Mars is farther from the Sun.", "Correct! Mercury is the closest planet to the Sun.", "Jupiter is much farther from the Sun."] }
+        ];
+
+        const passingScore = 10;
+
+        // Dynamically generate questions
+        const container = document.getElementById('questionsContainer');
+        questions.forEach(q => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+            questionDiv.innerHTML = `
+                <label>${q.id}. ${q.question}</label>
+                ${q.options.map((opt, index) => `
+                    <input type="radio" name="q${q.id}" value="${index}"> ${opt}<br>
+                `).join('')}
+            `;
+            container.appendChild(questionDiv);
+        });
+
+        // Navigation functions
+        function goToQuiz() {
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('quizPage').classList.remove('hidden');
+        }
+
+        function goToHome() {
+            document.getElementById('resultsPage').classList.add('hidden');
+            document.getElementById('homePage').classList.remove('hidden');
+        }
+
+        // Submit quiz and navigate to results
+        function submitQuiz() {
+            let totalScore = 0;
+            const feedbackContainer = document.getElementById('feedbackContainer');
+            feedbackContainer.innerHTML = ''; // Clear previous feedback
+
+            questions.forEach(q => {
+                const selectedOption = document.querySelector(`input[name="q${q.id}"]:checked`);
+                if (selectedOption) {
+                    const selectedIndex = parseInt(selectedOption.value);
+                    if (selectedIndex === q.correct) {
+                        totalScore += 5; // Correct answer adds 5 points
+                    } else {
+                        totalScore -= 2; // Wrong answer deducts 2 points
+                    }
+
+                    // Add feedback
+                    const feedbackDiv = document.createElement('div');
+                    feedbackDiv.classList.add('feedback');
+                    feedbackDiv.textContent = `${q.id}. ${q.feedback[selectedIndex]}`;
+                    feedbackContainer.appendChild(feedbackDiv);
+                } else {
+                    // Add feedback for unanswered question
+                    const feedbackDiv = document.createElement('div');
+                    feedbackDiv.classList.add('feedback');
+                    feedbackDiv.textContent = `${q.id}. You did not answer this question.`;
+                    feedbackContainer.appendChild(feedbackDiv);
+                }
+            });
+
+            totalScore = Math.max(0, totalScore); // Ensure score doesn't go below 0
+
+            // Display results
+            const resultBox = document.getElementById('resultBox');
+            if (totalScore >= passingScore) {
+                resultBox.className = 'result pass';
+                resultBox.textContent = `You Passed! Your score is ${totalScore}.`;
+            } else {
+                resultBox.className = 'result fail';
+                resultBox.textContent = `You Failed. Your score is ${totalScore}.`;
+            }
+
+            // Navigate to results page
+            document.getElementById('quizPage').classList.add('hidden');
+            document.getElementById('resultsPage').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
