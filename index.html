@@ -104,11 +104,11 @@
 
     <script>
         const questions = [
-            { id: 1, question: "What is 2 + 2?", options: ["3", "4", "5", "6", "7"], correct: 1, feedback: ["2 + 2 is not 3.", "Correct! 2 + 2 equals 4.", "2 + 2 is not 5.", "2 + 2 is not 6.", "2 + 2 is not 7."] },
-            { id: 2, question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Rome", "Lisbon"], correct: 2, feedback: ["Berlin is the capital of Germany.", "Madrid is the capital of Spain.", "Correct! Paris is the capital of France.", "Rome is the capital of Italy.", "Lisbon is the capital of Portugal."] },
-            { id: 3, question: "Which planet is closest to the Sun?", options: ["Earth", "Venus", "Mars", "Mercury", "Jupiter"], correct: 3, feedback: ["Earth is not the closest planet to the Sun.", "Venus is closer but not the closest.", "Mars is farther from the Sun.", "Correct! Mercury is the closest planet to the Sun.", "Jupiter is much farther from the Sun."] }
+            { id: 1, question: "Have the student drive until they reach the next turn:\n\nHow was the drive to the turn?", options: ["3", "4", "5", "6", "7"], correct: 1, feedback: ["2 + 2 is not 3.", "Correct! 2 + 2 equals 4.", "2 + 2 is not 5.", "2 + 2 is not 6.", "2 + 2 is not 7."] },
+            { id: 2, question: "Have the student turn at the closest turn:\n\nHow was the turn?", options: ["Berlin", "Madrid", "Paris", "Rome", "Lisbon"], correct: 2, feedback: ["Berlin is the capital of Germany.", "Madrid is the capital of Spain.", "Correct! Paris is the capital of France.", "Rome is the capital of Italy.", "Lisbon is the capital of Portugal."] },
+            { id: 3, question: "Have the student drive until they find an empty area to do a three point turn:\n\nHow was the drive to the empty space?", options: ["Earth", "Venus", "Mars", "Mercury", "Jupiter"], correct: 3, feedback: ["Earth is not the closest planet to the Sun.", "Venus is closer but not the closest.", "Mars is farther from the Sun.", "Correct! Mercury is the closest planet to the Sun.", "Jupiter is much farther from the Sun."] }
         ];
-
+        questionweight = [2, 10, 5]
         const passingScore = 10;
 
         // Dynamically generate questions
@@ -153,7 +153,7 @@
                     if (selectedIndex === q.correct) {
                         totalScore += 5; // Correct answer adds 5 points
                     } else {
-                        totalScore -= 2; // Wrong answer deducts 2 points
+                        totalScore -= questionweight[selectedIndex]; // Wrong answer deducts 2 points
                     }
 
                     // Add feedback
