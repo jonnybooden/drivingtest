@@ -104,12 +104,35 @@
 
     <script>
         const questions = [
-            { id: 1, question: "Have the student drive until they reach the next turn:\n\nHow was the drive to the turn?", options: ["The driver stayed under the speed limit while also moderating speed", "The driver exceeded the speed limit", "The driver drove under the speed limit", "The driver drifted as if they were drunk", "The driver did not moderate speed"], correct: 1, feedback: ["The driver's speed and moderation was good", "The driver needs to drive slower", "The driver needs to drive the speed limit", "The driver needs to stay in the middle of the lines", "The driver needs to moderate their speed"] },
-            { id: 2, question: "Have the student turn at the closest turn:\n\nHow was the turn?", options: ["The driver did not slow down before the turn", "The driver accelerated through the turn", "The driver slowed too early and had to creep up to the turn", "The driver turned wide", "The driver slowed before the turn, then accelerated after the turn"], correct: 2, feedback: ["The driver needs to slow down before taking the turn", "The driver needs to slow down during the turn", "The driver needs to time it right, so they don't have to creep up to the turn", "The driver needs to turn tight to stay in the inside lane", "The driver did a good job slowing before the turn and then accelerating after"] },
-            { id: 3, question: "Have the student drive until they find an empty area to do a three point turn:\n\nHow was the drive to the empty space?", options: ["The driver stayed under the speed limit while also moderating speed", "The driver exceeded the speed limit", "The driver drove under the speed limit", "The driver drifted as if they were drunk", "The driver didn't moderate speed"], correct: 1, feedback: ["The druver's speed and moderation was good", "The driver needs to drive slower", "The driver needs to drive the speed limit", "The driver needs to stay in the middle of the lines", "The driver needs to moderate their speed"] }
+            { id: 1, 
+             question: "Have the student drive until they reach the next turn:\n\nHow was the drive to the turn?", 
+             options: ["The driver stayed under the speed limit while also moderating speed", "The driver exceeded the speed limit", "The driver drifted as if they were drunk", "The driver did not moderate speed"], 
+             correct: 1, 
+             feedback: ["The driver's speed and moderation was good", "The driver needs to drive slower", "The driver needs to stay in the middle of the lines", "The driver needs to moderate their speed"],
+             weights: [0, 10, 7, 3]
+            },
+            { id: 2, 
+             question: "Have the student turn at the closest turn:\n\nHow was the turn?", 
+             options: ["The driver did not slow down before the turn", "The driver accelerated through the turn", "The driver turned wide", "The driver slowed before the turn, then accelerated after the turn"], 
+             correct: 2, 
+             feedback: ["The driver needs to slow down before taking the turn", "The driver needs to slow down during the turn", "The driver needs to turn tight to stay in the inside lane", "The driver did a good job slowing before the turn and then accelerating after"],
+             weights: [10, 7, 10, 0]
+            },
+            { id: 3, 
+             question: "Have the student drive until they find an empty area to do a three point turn:\n\nHow was the drive to the empty space?", 
+             options: ["The driver stayed under the speed limit while also moderating speed", "The driver exceeded the speed limit", "The driver drove under the speed limit", "The driver drifted as if they were drunk"], 
+             correct: 1, 
+             feedback: ["The driver's speed and moderation was good", "The driver needs to drive slower", "The driver needs to drive the speed limit", "The driver needs to stay in the middle of the lines"],
+             weights: [0, 10, 3, 7,], 
+            },
+            { id: 4,
+             question: "Have the driver perform a three point turn:\n\nHow was the three point turn?",
+             options: ["The driver backed up too fast", "The driver did not check to see if it was safe to back up", "The driver was unable to make a three point turn", "The driver checked to make sure it was safe to back up, then performed a good three point turn"],
+             correct: 4,
+             feedback: ["The driver needs to slow down when backing up", "The driver needs to check to see if it is safe to back up", "The driver needs to practice three point turns more", "The driver checked to see if it was safe to back up, then he performed a good three point turn"],
+             weights: [7, 10, 5, 0],
+            }
         ];
-        questionweight = [2, 10, 5]
-        const passingScore = 10;
 
         // Dynamically generate questions
         const container = document.getElementById('questionsContainer');
