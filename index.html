@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Page Quiz App with Feedback</title>
+    <title>Driving Test</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -107,73 +107,34 @@
             { id: 1, 
              question: "Have the student drive until they reach the next turn:\n\nHow was the drive to the turn?", 
              options: ["The driver stayed under the speed limit while also moderating speed", "The driver exceeded the speed limit", "The driver drifted as if they were drunk", "The driver did not moderate speed"], 
-             correct: 1, 
+             correct: 0, 
              feedback: ["The driver's speed and moderation was good", "The driver needs to drive slower", "The driver needs to stay in the middle of the lines", "The driver needs to moderate their speed"],
-             weights: [0, 10, 7, 3]
+             weights: [20, -20, -15, -5]
             },
             { id: 2, 
              question: "Have the student turn at the closest turn:\n\nHow was the turn?", 
              options: ["The driver did not slow down before the turn", "The driver accelerated through the turn", "The driver turned wide", "The driver slowed before the turn, then accelerated after the turn"], 
-             correct: 2, 
+             correct: 3, 
              feedback: ["The driver needs to slow down before taking the turn", "The driver needs to slow down during the turn", "The driver needs to turn tight to stay in the inside lane", "The driver did a good job slowing before the turn and then accelerating after"],
-             weights: [10, 7, 10, 0]
+             weights: [-15, -10, -20, 20]
             },
             { id: 3, 
              question: "Have the student drive until they find an empty area to do a three point turn:\n\nHow was the drive to the empty space?", 
              options: ["The driver stayed under the speed limit while also moderating speed", "The driver exceeded the speed limit", "The driver drove under the speed limit", "The driver drifted as if they were drunk"], 
-             correct: 1, 
+             correct: 0, 
              feedback: ["The driver's speed and moderation was good", "The driver needs to drive slower", "The driver needs to drive the speed limit", "The driver needs to stay in the middle of the lines"],
-             weights: [0, 10, 3, 7,], 
+             weights: [20, -20, -15, -5]
             },
             { id: 4,
              question: "Have the driver perform a three point turn:\n\nHow was the three point turn?",
              options: ["The driver backed up too fast", "The driver did not check to see if it was safe to back up", "The driver was unable to make a three point turn", "The driver checked to make sure it was safe to back up, then performed a good three point turn"],
-             correct: 4,
+             correct: 3,
              feedback: ["The driver needs to slow down when backing up", "The driver needs to check to see if it is safe to back up", "The driver needs to practice three point turns more", "The driver checked to see if it was safe to back up, then he performed a good three point turn"],
-             weights: [7, 10, 5, 0],
+             weights: [-15, -20, -5, 20]
             }
         ];
-        
-            button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .result.pass {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            padding: 10px;
-            text-align: center;
-            border-radius: 4px;
-        }
-        .result.fail {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            padding: 10px;
-            text-align: center;
-            border-radius: 4px;
-        }
-        .feedback {
-            margin: 15px 0;
-            padding: 10px;
-            background-color: #f5f5f5;
-            border-left: 5px solid #ccc;
-        }
-    </style>
-</head>
-<body>
-        // Dynamically generate questions
+
+        // Generate questions dynamically
         const container = document.getElementById('questionsContainer');
         questions.forEach(q => {
             const questionDiv = document.createElement('div');
@@ -202,7 +163,7 @@
             document.getElementById('homePage').classList.remove('hidden');
         }
 
-        // Submit quiz and navigate to results
+        // Submit quiz and show results
         function submitQuiz() {
             let totalScore = 0;
             const feedbackContainer = document.getElementById('feedbackContainer');
@@ -212,19 +173,13 @@
                 const selectedOption = document.querySelector(`input[name="q${q.id}"]:checked`);
                 if (selectedOption) {
                     const selectedIndex = parseInt(selectedOption.value);
-                    if (selectedIndex === q.correct) {
-                        totalScore += 5; // Correct answer adds 5 points
-                    } else {
-                        totalScore -= questionweight[selectedIndex]; // Wrong answer deducts 2 points
-                    }
+                    totalScore += q.weights[selectedIndex];
 
-                    // Add feedback
                     const feedbackDiv = document.createElement('div');
                     feedbackDiv.classList.add('feedback');
                     feedbackDiv.textContent = `${q.id}. ${q.feedback[selectedIndex]}`;
                     feedbackContainer.appendChild(feedbackDiv);
                 } else {
-                    // Add feedback for unanswered question
                     const feedbackDiv = document.createElement('div');
                     feedbackDiv.classList.add('feedback');
                     feedbackDiv.textContent = `${q.id}. You did not answer this question.`;
@@ -232,19 +187,15 @@
                 }
             });
 
-            totalScore = Math.max(0, totalScore); // Ensure score doesn't go below 0
-
-            // Display results
             const resultBox = document.getElementById('resultBox');
-            if (totalScore >= passingScore) {
+            if (totalScore >= 70) {
                 resultBox.className = 'result pass';
-                resultBox.textContent = `You Passed! Your score is ${totalScore}.`;
+                resultBox.textContent = `You Passed! Your total score is ${totalScore}.`;
             } else {
                 resultBox.className = 'result fail';
-                resultBox.textContent = `You Failed. Your score is ${totalScore}.`;
+                resultBox.textContent = `You Failed. Your total score is ${totalScore}.`;
             }
 
-            // Navigate to results page
             document.getElementById('quizPage').classList.add('hidden');
             document.getElementById('resultsPage').classList.remove('hidden');
         }
